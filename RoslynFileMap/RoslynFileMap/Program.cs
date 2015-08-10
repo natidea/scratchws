@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,10 +14,27 @@ namespace RoslynFileMap
     // http://www.newtonsoft.com/json/help/html/SerializeDictionary.htm
     class Program
     {
+        static int option = 1;
+
         static void Main(string[] args)
         {
-            string directory = args.Any() ? args.First() : @"D:\Repos\github\roslyn\src";
+            if (option == 0)
+            {
+                CreateSourceMap(
+                    args.Any() ? args.First() : @"D:\Repos\github\roslyn\src",
+                    "../../output/roslyn.json");
+            }
+            
+            if (option == 1)
+            {
+                DemoReadMap("dotnet/roslyn");
+            }
 
+            Console.ReadKey();
+        }
+
+        public static void CreateSourceMap(string directory, string output)
+        {
             // get map
             var fileMap = GetFileMap(directory);
 
@@ -23,10 +42,9 @@ namespace RoslynFileMap
             var json = JsonConvert.SerializeObject(fileMap, Formatting.Indented);
 
             // write to file
-            File.WriteAllText("../../output/roslyn.json", json);
+            File.WriteAllText(output, json);
 
             Console.WriteLine($"Wrote {fileMap.Count} entries");
-            Console.ReadKey();
         }
 
         private static Dictionary<string, string> GetFileMap(string directory)
@@ -38,5 +56,21 @@ namespace RoslynFileMap
                 .Select(f => f.FullName.Substring(len + 1).Replace("\\", "/"))
                 .ToDictionary(p => p.ToLowerInvariant());
         }
+
+        public static void DemoReadMap(string repository)
+        {
+            string key = repository + "/sourceMap";
+            string pathToMap = ConfigurationManager.AppSettings[key];
+
+            // Make a request to get raw map synchronously
+            HttpClient client = new HttpClient();
+            var response = client.GetAsync(pathToMap).Result;
+            string rawMap = response.Content.ReadAsStringAsync().Result;
+
+            var demoMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(rawMap);
+            Console.WriteLine(demoMap.First());
+        }
+
+
     }
 }
