@@ -14,15 +14,15 @@ namespace RoslynFileMap
     // http://www.newtonsoft.com/json/help/html/SerializeDictionary.htm
     class Program
     {
-        static int option = 1;
+        static int option = 0;
 
         static void Main(string[] args)
         {
             if (option == 0)
             {
                 CreateSourceMap(
-                    args.Any() ? args.First() : @"D:\Repos\github\roslyn\src",
-                    "../../output/roslyn.json");
+                    args.Any() ? args.First() : @"D:\Repos\github\coby\src",
+                    "../../output/coby.json");
             }
             
             if (option == 1)
