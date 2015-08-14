@@ -28,8 +28,9 @@ namespace RoslynFileMap
             if (option == 0)
             {
                 CreateSourceMap(
-                    args.Any() ? args.First() : ConfigurationManager.AppSettings[key + "/rootDir"],
-                    "../../output/coby.json");
+                    args.Any() ? args.First() : 
+                        ConfigurationManager.AppSettings[key + "/rootDir"],
+                    ConfigurationManager.AppSettings[key + "/output"]);
             }
             
             if (option == 1)
