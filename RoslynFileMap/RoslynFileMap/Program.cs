@@ -14,7 +14,7 @@ namespace RoslynFileMap
     // http://www.newtonsoft.com/json/help/html/SerializeDictionary.htm
     class Program
     {
-        static int option = 0;
+        static int option = 1;
 
         static void Main(string[] args)
         {
