@@ -16,18 +16,25 @@ namespace RoslynFileMap
     {
         static int option = 0;
 
+        static List<string> keys = new List<string> {
+            "dotnet/coby",
+            "dotnet/roslyn"
+        };
+
         static void Main(string[] args)
         {
+            string key = keys[0];
+
             if (option == 0)
             {
                 CreateSourceMap(
-                    args.Any() ? args.First() : @"D:\Repos\github\coby\src",
+                    args.Any() ? args.First() : ConfigurationManager.AppSettings[key + "/rootDir"],
                     "../../output/coby.json");
             }
             
             if (option == 1)
             {
-                DemoReadMap("dotnet/roslyn");
+                DemoReadMap(key);
             }
 
             Console.ReadKey();
