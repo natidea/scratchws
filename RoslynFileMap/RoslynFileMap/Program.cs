@@ -16,9 +16,14 @@ namespace RoslynFileMap
     {
         static int option = 1;
 
+        static List<string> keys = new List<string> {
+            "dotnet/coby",
+            "dotnet/roslyn"
+        };
+
         static void Main(string[] args)
         {
-            string key = "dotnet/coby";
+            string key = keys[0];
 
             if (option == 0)
             {
